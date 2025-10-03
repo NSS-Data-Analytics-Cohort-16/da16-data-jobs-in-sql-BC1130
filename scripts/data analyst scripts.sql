@@ -48,23 +48,14 @@ ANSWER: 151
 
 -- 6.	Show the average star rating for companies in each state. The output should show the state as `state` and the average rating for the state as `avg_rating`. Which state shows the highest average rating?
 SELECT DISTINCT(company), location AS state,
-	AVG(star_rating) AS avg_rating	
+	ROUND(AVG(star_rating), 0) AS avg_rating	
 	FROM data_analyst_jobs
 	WHERE star_rating IS NOT NULL
 	GROUP BY company, state
 	ORDER BY avg_rating DESC;
 
-SELECT
-	company,
-	location AS state,
-	MAX(star_rating)	
-	FROM (select avg(star_rating) AS avg_rating
-	FROM data_analyst_jobs
-	GROUP BY star_rating), data_analyst_jobs
-	WHERE star_rating IS NOT NULL
-	GROUP BY star_rating, location, company
-	ORDER BY star_rating DESC;
-
+ANSWER: Nebraska (my answer was NY, and I cannot figure out how Nebraska has the top average)
+	
 -- 7.	Select unique job titles from the data_analyst_jobs table. How many are there?
 SELECT COUNT(DISTINCT title)
 	FROM data_analyst_jobs
@@ -100,18 +91,20 @@ SELECT
 ANSWER: a 6 way tie - AmEx, GM, Kaiser, Microsoft, Nike, Unilever
 
 -- 11.	Find all the job titles that contain the word ‘Analyst’. How many different job titles are there? 
-SELECT *
+SELECT DISTINCT(title)
 	FROM data_analyst_jobs
-	WHERE title LIKE '%analyst%' 
-	AND title LIKE '%Analyst%'
+	WHERE title ILIKE '%analyst%' 
+	OR title ILIKE '%Analyst%'
 
-ANSWER: 774 (But my answer was 757)
+ANSWER: 774
 
 -- 12.	How many different job titles do not contain either the word ‘Analyst’ or the word ‘Analytics’? What word do these positions have in common?
 SELECT DISTINCT(title)
 	FROM data_analyst_jobs
-	WHERE title NOT LIKE '%analyst%' 
-	AND title NOT LIKE '%Analytics%'
+	WHERE title NOT ILIKE '%analyst%' 
+	AND title NOT ILIKE '%Analytics%'
+
+ANSWER: Tableau
 
 Like
 -- **BONUS:**
@@ -119,3 +112,19 @@ Like
 --  - Disregard any postings where the domain is NULL. 
 --  - Order your results so that the domain with the greatest number of `hard to fill` jobs is at the top. 
 --   - Which three industries are in the top 3 on this list? How many jobs have been listed for more than 3 weeks for each of the top 3?
+
+SELECT COUNT (title) AS number_of_jobs, domain
+	FROM data_analyst_jobs
+	WHERE days_since_posting > 21
+	AND skill = 'SQL'
+	AND domain is NOT null
+	GROUP BY domain
+	ORDER BY number_of_jobs DESC
+
+ANSWER: Top 3 Industries are Consulting and Business Services (5), Consumer Goods and Services (2), and Computers and Electronics (1)
+
+
+		
+
+
+	
