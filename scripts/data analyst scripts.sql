@@ -47,14 +47,14 @@ SELECT COUNT(*)
 ANSWER: 151
 
 -- 6.	Show the average star rating for companies in each state. The output should show the state as `state` and the average rating for the state as `avg_rating`. Which state shows the highest average rating?
-SELECT DISTINCT(company), location AS state,
-	ROUND(AVG(star_rating), 0) AS avg_rating	
+SELECT location AS state,
+	ROUND(AVG(star_rating), 2) AS avg_rating	
 	FROM data_analyst_jobs
 	WHERE star_rating IS NOT NULL
-	GROUP BY company, state
+	GROUP BY state
 	ORDER BY avg_rating DESC;
 
-ANSWER: Nebraska (my answer was NY, and I cannot figure out how Nebraska has the top average)
+ANSWER: Nebraska
 	
 -- 7.	Select unique job titles from the data_analyst_jobs table. How many are there?
 SELECT COUNT(DISTINCT title)
